@@ -5,7 +5,36 @@ from flask import Flask
   
 app = Flask(__name__)
 
-# TODO - optimization
+def get_latitude(lat, lat_direction):
+    lat_degree = (float)(lat[0:2])
+    lat_min = ((float)(lat[2:]))/60.0
+    latitude=0
+    if(lat_direction=='S'):
+     return -(lat_degree+lat_min)
+    else:
+     return lat_degree+lat_min
+
+def get_longitude(lon, lon_direction):
+    lon_degree = 0
+    lon_min = 0
+
+    if(len(lon)==7):
+     lon_degree = (float)(lon[0:2])
+     lon_min = ((float)(lon[2:]))/60
+    else:
+     lon_degree =(float) (lon[0:3])
+     lon_min = ((float)(lon[3:]))/60
+    if(lon_direction=='W'):
+     return -(lon_degree+lon_min)
+    else:
+     return lon_degree+lon_min
+    
+def get_date_time(time_utc, date_gps):
+    date = date_gps[0:2] + "/" + date_gps[2:4] + "/"+date_gps[4:]+""
+    time = time_utc[0:2] + ":" + time_utc[2:4] + ":"+time_utc[4:]+""
+
+    return date+time
+      
 def read_GPS_data():
   port = serial.Serial('/dev/ttyS0', 9600)
   line = port.readline(1000) 
@@ -17,51 +46,26 @@ def read_GPS_data():
     time_utc = gprmc_splitted[0]
     lat = gprmc_splitted[2]
     lat_direction = gprmc_splitted[3]
-    date = gprmc_splitted[8]
-    day = (int) (date[0:2])
-    month = (int) (date[2:4])
-    year = (int) (date[4:])
-    hours = (int) (time_utc[0:2])
-    minutes = (int) (time_utc[2:4])
-    seconds =(int) (time_utc[4:])
-    date_time =  datetime.datetime(year,month,day, hours, minutes, seconds)
-    lat_degree = (float)(lat[0:2])
-    lat_min = ((float)(lat[2:]))/60.0
-    latitude=0
-    if(lat_direction=='S'):
-     latitude = -(lat_degree+lat_min)
-    else:
-     latitude = lat_degree+lat_min
     lon = gprmc_splitted[4]
     lon_direction = gprmc_splitted[5]
-    lon_degree = 0
-    lon_min = 0
-    longitude=0
-    if(len(lon)==7):
-     lon_degree = (float)(lon[0:2])
-     lon_min = ((float)(lon[2:]))/60
-    else:
-     lon_degree =(float) (lon[0:3])
-     lon_min = ((float)(lon[3:]))/60
-    if(lat_direction=='W'):
-     longitude = -(lat_degree+lat_min)
-    else:
-     longitude = lon_degree+lon_min
+    date_gps = gprmc_splitted[8]
+    date_time = get_date_time(time_utc, date_gps)
+    latitude = get_latitude(lat, lat_direction) 
+    longitude = get_longitude(lon, lon_direction) 
 
-    return "latitude:"+str(latitude)+", longitude:"+str(longitude)+", "+date_time.strftime('%d/%m/%Y, %H:%M:%S')+""
-
-
+    return "latitude:"+str(latitude)+", longitude:"+str(longitude)+", "+date_time+""
+    
 @app.route("/picture")
 def take_picture():
        pass
 
 @app.route("/live-stream")
 def start_live_stream():
-       pass
+    gps_data = read_GPS_data()
 
 @app.route("/video/<date>")
 def get_video(date):
-       read_GPS_data()
+       pass
 
 if (__name__=="__main__"):
     app.run()
