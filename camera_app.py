@@ -60,19 +60,18 @@ def read_GPS_data():
 
     return "latitude:"+str(latitude)+", longitude:"+str(longitude)+", "+date_time+""
 
+# TODO - form response
 class Picture(Resource):
     def get(self):
-        print("HERE")
-        return {"data": read_GPS_data()}
+        pass
 
 class LiveStream(Resource):
     def get(self):
-        return {"data":"live stream"}
-
+        pass
 
 class Video(Resource):
     def get(self, date):
-        return {"data":date}
+        pass
 
 api.add_resource(Picture, "/picture")
 api.add_resource(LiveStream, "/live-stream")
