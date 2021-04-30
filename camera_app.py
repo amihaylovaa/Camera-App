@@ -41,8 +41,8 @@ def get_date_time(time_utc, date_gps):
     return date+" "+time
       
 def read_GPS_data():
- # port = serial.Serial('/dev/ttyS0', 9600)
-  line = "$GPRMC,081836,A,3751.65,S,14507.36,E,000.0,360.0,130998,011.3,E*62" #port.readline(1000) 
+  port = serial.Serial('/dev/ttyS0', 9600)
+  line = port.readline(1000) 
   start_tag = 0
   end_tag =  6  
   if ("$GPRMC"==line[start_tag:end_tag]): 
