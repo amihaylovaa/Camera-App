@@ -2,8 +2,13 @@ import re
 import datetime
 import serial 
 from flask import Flask
-  
+from flask import send_file
+from flask_restful import Resource, Api
+from flask_cors import CORS, cross_origin
+
 app = Flask(__name__)
+api = Api(app)
+CORS(app)
 
 def get_latitude(lat, lat_direction):
     lat_degree = (float)(lat[0:2])
@@ -30,14 +35,14 @@ def get_longitude(lon, lon_direction):
      return lon_degree+lon_min
     
 def get_date_time(time_utc, date_gps):
-    date = date_gps[0:2] + "/" + date_gps[2:4] + "/"+date_gps[4:]+""
+    date = date_gps[0:2] + "-" + date_gps[2:4] + "-"+date_gps[4:]+""
     time = time_utc[0:2] + ":" + time_utc[2:4] + ":"+time_utc[4:]+""
 
-    return date+time
+    return date+" "+time
       
 def read_GPS_data():
-  port = serial.Serial('/dev/ttyS0', 9600)
-  line = port.readline(1000) 
+ # port = serial.Serial('/dev/ttyS0', 9600)
+  line = "$GPRMC,081836,A,3751.65,S,14507.36,E,000.0,360.0,130998,011.3,E*62" #port.readline(1000) 
   start_tag = 0
   end_tag =  6  
   if ("$GPRMC"==line[start_tag:end_tag]): 
@@ -54,18 +59,24 @@ def read_GPS_data():
     longitude = get_longitude(lon, lon_direction) 
 
     return "latitude:"+str(latitude)+", longitude:"+str(longitude)+", "+date_time+""
-    
-@app.route("/picture")
-def take_picture():
-       pass
 
-@app.route("/live-stream")
-def start_live_stream():
-    gps_data = read_GPS_data()
+class Picture(Resource):
+    def get(self):
+        print("HERE")
+        return {"data": read_GPS_data()}
 
-@app.route("/video/<date>")
-def get_video(date):
-       pass
+class LiveStream(Resource):
+    def get(self):
+        return {"data":"live stream"}
+
+
+class Video(Resource):
+    def get(self, date):
+        return {"data":date}
+
+api.add_resource(Picture, "/picture")
+api.add_resource(LiveStream, "/live-stream")
+api.add_resource(Video, "/video/<string:date>")
 
 if (__name__=="__main__"):
-    app.run()
+    app.run(debug=True)
