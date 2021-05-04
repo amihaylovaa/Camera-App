@@ -21,11 +21,17 @@ def get_longitude(lon, lon_direction):
     return lon_degree + '° ' + lon_min + '\' ' + lon_direction
 
 
-def get_date_time(time_utc, date_gps):
-    date = date_gps[0:2] + "-" + date_gps[2:4] + "-" + date_gps[4:] + ""
-    time = time_utc[0:2] + ":" + time_utc[2:4] + ":" + time_utc[4:] + ""
-
-    return date + " " + time
+def get_date_time(time_gps, date_gps):
+    day = (int)(date_gps[0:2])
+    month = (int)(date_gps[2:4])
+    year = (int)(date_gps[4:])
+    hour = (int)(time_gps[0:2])
+    minutes =  (int)(time_gps[2:4]) 
+    seconds = (int)(time_gps[4:])
+    date_time_gps = localtime.localtime(year, month, day, hour, minutes, seconds)
+    offset = datetime.timedelta(hours=3)
+    
+    return date_time_gps + offset
 
 
 def read_gps_data():
@@ -36,14 +42,14 @@ def read_gps_data():
     if "$GPRMC" == line[start_tag:end_tag]:
         gprmc_line = line[(end_tag + 1):]
         gprmc_splitted = re.findall("[^,]+", gprmc_line)
-        time_utc = gprmc_splitted[0]
+        time_gps = gprmc_splitted[0]
         lat = gprmc_splitted[2]
         lat_direction = gprmc_splitted[3]
         lon = gprmc_splitted[4]
         lon_direction = gprmc_splitted[5]
         date_gps = gprmc_splitted[8]
-        date_time = get_date_time(time_utc, date_gps)
+        date_time = get_date_time(time_gps, date_gps)
         latitude = get_latitude(lat, lat_direction)
         longitude = get_longitude(lon, lon_direction)
 
-        return "latitude:" + str(latitude) + ", longitude:" + str(longitude) + ", " + date_time + ""
+        return "latitude:" + str(latitude) + ", longitude:" + str(longitude) + ", " + str(date_time) + ""

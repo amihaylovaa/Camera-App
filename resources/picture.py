@@ -1,5 +1,4 @@
 import base64
-
 import cv2
 from flask import make_response
 from flask_restful import Resource, abort
