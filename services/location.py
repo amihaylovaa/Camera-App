@@ -36,20 +36,23 @@ def get_date_time(time_gps, date_gps):
 
 def read_gps_data():
     port = serial.Serial('/dev/ttyAMA0', 9600, timeout=1)
-    line = port.readline()
     start_tag = 0
     end_tag = 6
-    if "$GPRMC" == line[start_tag:end_tag]:
-        gprmc_line = line[(end_tag + 1):]
-        gprmc_splitted = re.findall("[^,]+", gprmc_line)
-        time_gps = gprmc_splitted[0]
-        lat = gprmc_splitted[2]
-        lat_direction = gprmc_splitted[3]
-        lon = gprmc_splitted[4]
-        lon_direction = gprmc_splitted[5]
-        date_gps = gprmc_splitted[8]
-        date_time = get_date_time(time_gps, date_gps)
-        latitude = get_latitude(lat, lat_direction)
-        longitude = get_longitude(lon, lon_direction)
+    while(1):
+     line = port.readline()
+     if "$GPRMC" == line[start_tag:end_tag]:
+        gprmc_sentence = line[(end_tag + 1):]
+        gprmc_sentence_splitted = re.findall("[^,]+", gprmc_sentence)
+        validation = gprmc_sentence_splitted[1]
+        if validation == 'A'
+         lat = gprmc_sentence_splitted[2]
+         lat_direction = gprmc_sentence_splitted[3]
+         lon = gprmc_sentence_splitted[4]
+         lon_direction = gprmc_sentence_splitted[5]
+         time_gps = gprmc_sentence_splitted[0]
+         date_gps = gprmc_sentence_splitted[8]
+         date_time = get_date_time(time_gps, date_gps)
+         latitude = get_latitude(lat, lat_direction)
+         longitude = get_longitude(lon, lon_direction)
 
-        return "latitude:" + str(latitude) + ", longitude:" + str(longitude) + ", " + str(date_time) + ""
+         return "latitude:" + str(latitude) + ", longitude:" + str(longitude) + ", " + str(date_time) + ""
