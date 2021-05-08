@@ -1,6 +1,6 @@
 import base64
 
-from flask import Flask, Response
+from flask import Flask, Response, render_template
 from flask_cors import CORS
 from flask_restful import abort
 
@@ -8,6 +8,11 @@ from services.camera import Camera
 
 app = Flask(__name__)
 CORS(app)
+
+
+@app.route('/', methods=['GET'])
+def load_main_page():
+    return render_template('index.html')
 
 
 @app.route('/picture', methods=['POST'])
@@ -31,7 +36,7 @@ def gen(camera):
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 
-@app.route('/live_stream')
+@app.route('/live-stream')
 def live_stream():
     return Response(gen(Camera()), mimetype='multipart/x-mixed-replace; boundary=frame')
 
