@@ -1,0 +1,31 @@
+body{
+    background-color: black
+}
+
+#action{
+    margin-left: 530px;
+    margin-top: 100px;
+}
+
+#result{
+    margin-left: 470px;
+}
+
+button{
+ color: orangered;
+ background-color: black;
+ border-radius: 5px;  
+ border-color: orangered;
+ margin: 5px;
+ box-shadow: orangered 1px 1px 3px;
+}
+
+#video, #live-stream, #picture{
+    padding: 25px;
+}
+
+#video{
+    padding-left: 50px;
+    padding-right: 50px;
+}
+

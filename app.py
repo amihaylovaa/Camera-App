@@ -1,18 +1,50 @@
-from flask import Flask
-from flask_cors import CORS
-from flask_restful import Api
+import base64
 
-from resources.live_stream import LiveStream
-from resources.picture import Picture
-from resources.video import Video
+from flask import Flask, Response, render_template
+from flask_cors import CORS
+from flask_restful import abort
+
+from services.camera import Camera
 
 app = Flask(__name__)
-api = Api(app)
 CORS(app)
 
-api.add_resource(Picture, "/picture")
-api.add_resource(LiveStream, "/live-stream")
-api.add_resource(Video, "/video/<string:date>")
+
+@app.route('/', methods=['GET'])
+def load_main_page():
+    return render_template('index.html')
+
+
+@app.route('/picture', methods=['POST'])
+def picture():
+    try:
+        frame = Camera().get_frame()
+    except RuntimeError as err:
+        abort(500, description=err.__str__())
+
+    # TODO: Fix image storing
+    # stored = store_frame(frame)
+
+    return Response(base64.b64encode(frame))
+
+
+def gen(camera):
+    """Video streaming generator function."""
+    while True:
+        frame = camera.get_frame()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+
+@app.route('/live-stream')
+def live_stream():
+    return Response(gen(Camera()), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+@app.route('/video')
+def video():
+    pass
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()

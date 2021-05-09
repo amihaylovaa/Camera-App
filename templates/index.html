@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="text/html" charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="../static/css/default.css">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.5.1.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/entry.js') }}"></script>
+</head>
+<body>
+    <div>
+        <button id = "stop">Stop</button>
+    </div>
+    <div id="result"></div>
+    <div id="action">
+        <button id="picture">Take a picture</button>
+        <button id="live-stream">Start live stream</button>
+        <button id="video">Video</button>
+        <input type="date" id = "date">
+        <button id = "send">Send</button>
+    </div>
+</body>
+
+</html>
