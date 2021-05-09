@@ -1,5 +1,5 @@
 import re
-from datetime import datetime, timedelta
+from datetime import datetime
 import serial
 
 
@@ -28,7 +28,7 @@ def get_date_time(time_gps, date_gps):
     hour = (int)(time_gps[0:2])
     minutes =  (int)(time_gps[2:4]) 
     seconds = (int)(time_gps[4:])
-    date_time_gps = localtime.localtime(year, month, day, hour, minutes, seconds)
+    date_time_gps = datetime.datetime(year, month, day, hour, minutes, seconds)
     offset = datetime.timedelta(hours=3)
     
     return date_time_gps + offset
