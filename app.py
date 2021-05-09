@@ -14,8 +14,7 @@ CORS(app)
 def load_main_page():
     return render_template('index.html')
 
-
-@app.route('/picture', methods=['POST'])
+@app.route('/picture', methods=['GET'])
 def picture():
     try:
         frame = Camera().get_frame()
@@ -36,8 +35,9 @@ def gen(camera):
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 
-@app.route('/live-stream')
+@app.route('/live-stream', methods=['GET'])
 def live_stream():
+
     return Response(gen(Camera()), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 

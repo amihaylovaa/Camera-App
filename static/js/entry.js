@@ -9,7 +9,7 @@ $(document).ready(function () {
 
       $.ajax({
          url: 'http://127.0.0.1:5000/picture',
-         type: 'POST',
+         type: 'GET',
          contentType: 'application/json',
          crossDomain: true,
        }).done(function (response) {
@@ -27,16 +27,7 @@ $(document).ready(function () {
       $('#picture').prop('disabled', true);
       $('#video').prop('disabled', true);
 
-      
-      $.ajax({
-         url: 'http://127.0.0.1:5000/live-stream',
-         type: 'GET',
-         contentType: 'application/json',
-         crossDomain: true,
-       }).done(function (response) {
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-           
-       }); 
+      location.href = 'http://127.0.0.1:5000/live-stream';
    });
 
    $("#video").click(function () {
