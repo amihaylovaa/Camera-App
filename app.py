@@ -45,7 +45,6 @@ def start_live_stream():
 
     return Response(gen(Camera()), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-
 @app.route('/video')
 def video():
     pass
