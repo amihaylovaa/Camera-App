@@ -1,14 +1,22 @@
 body{
-    background-color: black
+    background-color:black;
 }
 
-#action{
-    margin-left: 530px;
-    margin-top: 100px;
+div{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
 }
 
-#result{
-    margin-left: 470px;
+div a{
+    padding: 25px;
+    border: 2px solid orangered;
+    border-radius: 3px;
+    margin: 5px;
+    color: orangered;
+    text-decoration: none;
+    box-shadow: orangered 1px 1px 3px;
 }
 
 button{
@@ -18,14 +26,5 @@ button{
  border-color: orangered;
  margin: 5px;
  box-shadow: orangered 1px 1px 3px;
-}
-
-#video, #live-stream, #picture{
-    padding: 25px;
-}
-
-#video{
-    padding-left: 50px;
-    padding-right: 50px;
 }
 

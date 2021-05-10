@@ -1,0 +1,14 @@
+body{
+    background-color: black
+}
+
+img {
+    display: block;
+    width: 50%;
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid orangered;
+    border-radius: 3px;
+    box-shadow: orangered 1px 1px 3px;
+}

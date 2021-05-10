@@ -23,9 +23,9 @@ def picture():
 
     # TODO: Fix image storing
     # stored = store_frame(frame)
+    frame_encoded = base64.b64encode(frame).decode()
 
-    return Response(base64.b64encode(frame))
-
+    return render_template("picture.html", frame=frame_encoded)
 
 def gen(camera):
     """Video streaming generator function."""

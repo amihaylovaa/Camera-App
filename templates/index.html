@@ -8,18 +8,12 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js/entry.js') }}"></script>
 </head>
 <body>
-    <div>
-        <button id = "stop">Stop</button>
-    </div>
-    <div id="result">
-    </div>
     <div id="action">
-        <button id="picture">Take a picture</button>
-        <button id="live-stream">Start live stream</button>
-        <button id="video">Video</button>
+       <a id="picture" href="/picture">Take a picture</a>
+       <a id="live-stream" href="/live-stream">Start live stream</a>
+       <a id="video" href = "/video">Start live stream</a>
         <input type="date" id = "date">
         <button id = "send">Send</button>
     </div>
 </body>
-
 </html>
