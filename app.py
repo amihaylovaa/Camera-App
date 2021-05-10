@@ -9,7 +9,6 @@ from services.camera import Camera
 app = Flask(__name__)
 CORS(app)
 
-
 @app.route('/', methods=['GET'])
 def load_main_page():
     return render_template('index.html')
@@ -35,8 +34,14 @@ def gen(camera):
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 
+@app.route('/stream', methods=['GET'])
+def render_live_stream_template():
+
+    return render_template("stream.html")
+
+
 @app.route('/live-stream', methods=['GET'])
-def live_stream():
+def start_live_stream():
 
     return Response(gen(Camera()), mimetype='multipart/x-mixed-replace; boundary=frame')
 
