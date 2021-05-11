@@ -1,16 +1,19 @@
 $(document).ready(function () {
 
+   const host = "http://127.0.0.1:5000"
    hideDateInput();
    
    $("#picture").click(function () {
+      let url = host + "/picture"
 
-      location.href = "http://127.0.0.1:5000/picture";
+      location.href = url;
       return false;
    });
    
    $("#stream").click(function () {
+      let url = host + "/stream"
 
-      location.href = "http://127.0.0.1:5000/stream";
+      location.href = url;
       return false;
    });
 
@@ -25,7 +28,9 @@ $(document).ready(function () {
    $("#send").click(function () {
       hideDateInput();
       let date = $('#date').val();
-      location.href = "http://127.0.0.1:5000/video/"+date;
+      let url = host + "/video/" + date
+
+      location.href = url;
 
       return false;
    });

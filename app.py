@@ -39,7 +39,6 @@ def render_live_stream_template():
 
     return render_template("stream.html")
 
-
 @app.route('/live-stream', methods=['GET'])
 def start_live_stream():
 
