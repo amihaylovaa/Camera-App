@@ -2,8 +2,10 @@
   <head>
     <meta http-equiv="text/html" charset="utf-8">
     <link rel="stylesheet" type="text/css" href="../static/css/frames.css">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/helper_functions.js') }}"></script>
   </head>
   <body>
-    <img src=http://127.0.0.1:5000/live-stream width="520" height="395">
+    <img src=http://127.0.0.1:5000/live-stream width="520" height="400">
+    <button onclick="goBack()">Back</button>
   </body>
 </html>

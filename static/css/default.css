@@ -1,25 +1,15 @@
-body{
+body {
     background-color:black;
 }
 
-div{
+div { 
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%);
 }
 
-div a{
-    padding: 25px;
-    border: 2px solid orangered;
-    border-radius: 3px;
-    margin: 5px;
-    color: orangered;
-    text-decoration: none;
-    box-shadow: orangered 1px 1px 3px;
-}
-
-button{
+div button {
  color: orangered;
  background-color: black;
  border-radius: 5px;  
@@ -28,3 +18,17 @@ button{
  box-shadow: orangered 1px 1px 3px;
 }
 
+#video, #stream, #picture {
+    padding: 25px;
+}
+
+#video {
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+input {
+    background-color: black;
+    color: orangered;
+    border-color: orangered;
+}

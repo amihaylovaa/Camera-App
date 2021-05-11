@@ -12,3 +12,13 @@ img {
     border-radius: 3px;
     box-shadow: orangered 1px 1px 3px;
 }
+
+button{
+    color: orangered;
+    background-color: black;
+    border-color: orangered;
+    border-radius: 5px;  
+    width: 135px;
+    padding: 15px;
+    box-shadow: orangered 1px 1px 3px;
+}
