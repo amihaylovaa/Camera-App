@@ -45,10 +45,11 @@ def start_live_stream():
 
     return Response(gen(Camera()), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-@app.route('/video')
-def video():
-    pass
-
+@app.route('/video/<date>')
+def video(date):
+    
+    return render_template("video.html")
+  
 
 if __name__ == "__main__":
     app.run()
