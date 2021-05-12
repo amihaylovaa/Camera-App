@@ -1,5 +1,6 @@
 import base64
-
+import re
+import os
 from flask import Flask, Response, render_template
 from flask_cors import CORS
 from flask_restful import abort
@@ -46,9 +47,21 @@ def start_live_stream():
 
 @app.route('/video/<date>')
 def video(date):
-    
-    return render_template("video.html")
-  
+    files = [f for f in os.listdir('.') if os.path.isfile(f)]
+    files_id = []
 
+    for f in files:
+        if(f.startswith(date)):
+         file_id = re.search("\d(?!(-|\d))", f).group(0)
+         files_id.append(file_id)
+    
+    return render_template("video.html", files = files_id)
+  
+@app.route('/video/<date>/<file_id>')
+def show_video(file_id):
+
+    return Response(gen(Camera()), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+ 
 if __name__ == "__main__":
     app.run()

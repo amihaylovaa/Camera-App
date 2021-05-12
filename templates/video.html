@@ -5,9 +5,10 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js/helper_functions.js') }}"></script>
   </head>
   <body>
-    <div>
-    </div>
-    <img width="640" height="480">
+    <div id="video-container"></div>
+    {% for file in files %}
+    <button id="/{{file}}" onclick="loadVideo({{file}})"> Video {{ file }} </button>
+    {% endfor %}
     <button onclick="goBack()">Back</button>
   </body>
 </html>
