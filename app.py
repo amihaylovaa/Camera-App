@@ -48,20 +48,18 @@ def start_live_stream():
 @app.route('/video/<date>')
 def video(date):
     files = [f for f in os.listdir('.') if os.path.isfile(f)]
-    files_id = []
+    files_names = []
 
     for f in files:
         if(f.startswith(date)):
-         file_id = re.search("\d(?!(-|\d))", f).group(0)
-         files_id.append(file_id)
+         files_names.append(f)
     
-    return render_template("video.html", files = files_id)
+    return render_template("video.html", files = files_names)
   
-@app.route('/video/<date>/<file_id>')
-def show_video(file_id):
+@app.route('/<file_name>')
+def show_video(file_name):
 
     return Response(gen(Camera()), mimetype='multipart/x-mixed-replace; boundary=frame')
-
  
 if __name__ == "__main__":
     app.run()

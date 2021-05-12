@@ -7,7 +7,7 @@
   <body>
     <div id="video-container"></div>
     {% for file in files %}
-    <button id="/{{file}}" onclick="loadVideo({{file}})"> Video {{ file }} </button>
+    <button id="{{file}}" onclick="loadVideo(this.id)"> Video {{ file }} </button>
     {% endfor %}
     <button onclick="goBack()">Back</button>
   </body>
