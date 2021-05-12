@@ -1,0 +1,11 @@
+<html>
+  <head>
+    <meta http-equiv="text/html" charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="../static/css/frames.css">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/helper_functions.js') }}"></script>
+  </head>
+  <body>
+    <img src="data:image/jpeg;base64,{{ frame }}" width="640" height="480">
+    <button onclick="goBack()">Back</button>
+  </body>
+</html>

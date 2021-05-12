@@ -1,0 +1,14 @@
+<html>
+  <head>
+    <meta http-equiv="text/html" charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="../static/css/frames.css">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/helper_functions.js') }}"></script>
+  </head>
+  <body>
+    <div id="video-container"></div>
+    {% for file in files %}
+    <button id="{{file}}" onclick="loadVideo(this.id)"> Video {{ file }} </button>
+    {% endfor %}
+    <button onclick="goBack()">Back</button>
+  </body>
+</html>
