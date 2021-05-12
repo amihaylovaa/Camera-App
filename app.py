@@ -1,5 +1,4 @@
 import base64
-import re
 import os
 from flask import Flask, Response, render_template
 from flask_cors import CORS
