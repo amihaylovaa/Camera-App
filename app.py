@@ -24,8 +24,6 @@ def picture():
     except RuntimeError as err:
         abort(500, description=err.__str__())
 
-    # TODO: Fix image storing
-    # stored = store_frame(frame)
     frame_encoded = base64.b64encode(frame).decode()
 
     return render_template("picture.html", frame=frame_encoded)
@@ -51,7 +49,7 @@ def start_live_stream():
 
 @app.route('/videos/<date>')
 def video(date):
-    files = [f for f in os.listdir('.') if os.path.isfile(f) and f.__contains__(date)]
+    files = [f for f in os.listdir('.') if os.path.isfile(f) and f.__contains__(date)]    
     return render_template("video.html", files=files)
 
 

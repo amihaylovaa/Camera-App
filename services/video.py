@@ -31,7 +31,7 @@ class Video:
     def frames():
         cap = cv2.VideoCapture(Video.name)
         cap.open(Video.name)
-        while cap.IsOpened():
+        while cap.isOpened():
             captured, frame = cap.read()
 
             encoded, image = cv2.imencode('.jpg', frame)
