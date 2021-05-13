@@ -1,6 +1,7 @@
 import threading
 import time
 from _thread import get_ident
+from datetime import datetime
 
 import cv2
 
@@ -54,9 +55,13 @@ class Camera:
     background_thread = None  # reads frames from camera
     frame = None  # current frame stored by background thread
     last_access = 0  # timestamp of last client access to the camera
+
+    fourcc = None
+    video_writer = None
+
     event = CameraEvent()
 
-    def __init__(self):
+    def __init__(self, picture_request):
         """Start the background camera thread if it isn't running yet."""
         if Camera.background_thread is None:
             Camera.last_access = time.time()
@@ -68,6 +73,12 @@ class Camera:
             # Wait until frames are available.
             while Camera.get_frame() is None:
                 time.sleep(0)
+
+            Camera.fourcc = cv2.VideoWriter_fourcc(*'MP4V')
+
+        if not picture_request and Camera.video_writer is None:
+            Camera.video_writer = cv2.VideoWriter(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '.mp4', Camera.fourcc,
+                                                  20.0, (640, 480))
 
     @staticmethod
     def get_frame():
@@ -92,6 +103,9 @@ class Camera:
             if not captured:
                 raise RuntimeError('Could not capture frame.')
 
+            if Camera.video_writer is not None:
+                Camera.video_writer.write(frame)
+
             encoded, image = cv2.imencode('.jpg', frame)
             if not encoded:
                 raise RuntimeError('Could not encode frame.')
@@ -111,7 +125,12 @@ class Camera:
             # Stop the background thread if a client has not requested frames within the last 10 seconds.
             if time.time() - Camera.last_access > 10:
                 frames_iterator.close()
+
+                if Camera.video_writer is not None:
+                    Camera.video_writer.release()
+
                 print('Stopping camera thread due to inactivity.')
                 break
 
         Camera.background_thread = None
+        Camera.video_writer = None

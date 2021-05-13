@@ -28,7 +28,7 @@ $(document).ready(function () {
    $("#send").click(function () {
       hideDateInput();
       let date = $('#date').val();
-      let url = host + "/video/" + date
+      let url = host + "/videos/" + date
 
       location.href = url;
 
