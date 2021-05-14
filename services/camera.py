@@ -5,6 +5,8 @@ from datetime import datetime
 
 import cv2
 
+from services.location import Location
+
 
 def store_frame(frame):
     ts = int(time.time())
@@ -102,6 +104,9 @@ class Camera:
             captured, frame = camera.read()
             if not captured:
                 raise RuntimeError('Could not capture frame.')
+
+            # Embed location data within the frame.
+            cv2.putText(frame, Location().read_gps_data(), (10, 25), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 255, 255))
 
             if Camera.video_writer is not None:
                 Camera.video_writer.write(frame)
