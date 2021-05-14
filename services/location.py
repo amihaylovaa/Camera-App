@@ -1,7 +1,45 @@
 import datetime
-import re
 
 import serial
+
+
+class Location:
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = object.__new__(cls)
+
+        return cls._instance
+
+    def __init__(self):
+        self.port = serial.Serial('/dev/ttyS0', 115200)
+        self.sentence_type = "$GNRMC"
+        self.sentence_size = 1100
+        self.template = "Latitude: {} Longitude: {} Time: {}"
+
+    def read_gps_data(self):
+        data = self.port.read(self.sentence_size)
+        for line in data.decode().splitlines():
+            if line.startswith(self.sentence_type):
+                elements = line.split(",")
+                validation = elements[2]
+                if validation is 'V':
+                    continue
+
+                lat = elements[3]
+                lat_direction = elements[4]
+                lon = elements[5]
+                lon_direction = elements[6]
+                time = elements[1]
+                date = elements[9]
+                date_time = get_date_time(time, date)
+                latitude = get_latitude(lat, lat_direction)
+                longitude = get_longitude(lon, lon_direction)
+
+                return self.template.format(latitude, longitude, date_time)
+
+        return self.template.format("N/A", "N/A", "N/A")
 
 
 def get_latitude(lat, lat_direction):
@@ -22,38 +60,14 @@ def get_longitude(lon, lon_direction):
     return lon_degree + '° ' + lon_min + '\' ' + lon_direction
 
 
-def get_date_time(time_gps, date_gps):
-    day = int(date_gps[0:2])
-    month = int(date_gps[2:4])
-    year = int(date_gps[4:])
-    hour = int(time_gps[0:2])
-    minutes = int(time_gps[2:4])
-    seconds = int(time_gps[4:])
-    date_time_gps = datetime.datetime(year, month, day, hour, minutes, seconds)
+def get_date_time(time, date):
+    day = int(date[0:2])
+    month = int(date[2:4])
+    year = int(date[4:])
+    hour = int(time[0:2])
+    minutes = int(time[2:4])
+    seconds = int(time[4:6])
+    timestamp = datetime.datetime(year, month, day, hour, minutes, seconds)
     offset = datetime.timedelta(hours=3)
 
-    return date_time_gps + offset
-
-
-def read_gps_data():
-    port = serial.Serial('/dev/ttyAMA0', 9600, timeout=1)
-    start_tag = 0
-    end_tag = 6
-    while True:
-        line = port.readline()
-        if "$GPRMC" == line[start_tag:end_tag]:
-            gprmc_sentence = line[(end_tag + 1):]
-            gprmc_sentence_splitted = re.findall("[^,]+", gprmc_sentence)
-            validation = gprmc_sentence_splitted[1]
-            if validation == 'A':
-                lat = gprmc_sentence_splitted[2]
-                lat_direction = gprmc_sentence_splitted[3]
-                lon = gprmc_sentence_splitted[4]
-                lon_direction = gprmc_sentence_splitted[5]
-                time_gps = gprmc_sentence_splitted[0]
-                date_gps = gprmc_sentence_splitted[8]
-                date_time = get_date_time(time_gps, date_gps)
-                latitude = get_latitude(lat, lat_direction)
-                longitude = get_longitude(lon, lon_direction)
-
-                return "lat:" + str(latitude) + ", long:" + str(longitude) + ", " + str(date_time) + ""
+    return timestamp + offset
