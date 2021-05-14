@@ -33,19 +33,23 @@ class Video:
         cap.open(Video.name)
         while cap.isOpened():
             captured, frame = cap.read()
+            if frame is None:
+                break
 
             encoded, image = cv2.imencode('.jpg', frame)
             if not encoded:
                 raise RuntimeError('Could not encode frame.')
 
+            time.sleep(0.1)
+
             yield image.tobytes()
 
     @staticmethod
     def get_frame():
-        """Return the current camera frame."""
+        """Return the current video frame."""
         Video.last_access = time.time()
 
-        # Wait for a signal from the camera thread.
+        # Wait for a signal from the video thread.
         Video.event.wait()
         Video.event.clear()
 
@@ -53,8 +57,8 @@ class Video:
 
     @classmethod
     def _thread(cls):
-        """Camera background thread."""
-        print('Starting camera thread.')
+        """Video background thread."""
+        print('Starting video thread.')
 
         frames_iterator = cls.frames()
         for frame in frames_iterator:
@@ -64,7 +68,7 @@ class Video:
             # Stop the background thread if a client has not requested frames within the last 10 seconds.
             if time.time() - Video.last_access > 10:
                 frames_iterator.close()
-                print('Stopping camera thread due to inactivity.')
+                print('Stopping video thread due to inactivity.')
                 break
 
         Video.background_thread = None
